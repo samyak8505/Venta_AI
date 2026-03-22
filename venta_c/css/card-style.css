@@ -1,0 +1,241 @@
+.card-wrapper {
+  /* gap: 3.25rem; */
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 10;
+  align-items: center;
+  padding: 0px;
+}
+
+.card {
+  min-height: 200px;
+  width: 100%;
+  border-radius: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  background: #fff;
+  border: 1px solid var(--bottom-border);
+  padding: 5px;
+}
+
+/* .card::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  z-index: -1;
+  border: 0.155rem solid transparent;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+} */
+
+.card-body {
+  width: 100%;
+  display: block;
+  padding-top: 15px;
+  text-align: center;
+}
+
+.card-body img {
+  width: 80px;
+}
+
+.card-body h3 {
+  color: var(--card-txt);
+  font-size: 1.4rem;
+  margin-top: 0px;
+  margin-bottom: 0.188em;
+  text-transform: capitalize;
+  font-weight: 600;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.card-body p {
+  color: #ddd;
+  font-size: 1rem;
+  letter-spacing: 0.031rem;
+}
+
+.card-body .progress {
+  margin-top: 0.938rem;
+}
+
+.card-body .progress .progress-bar {
+  position: relative;
+  width: 100%;
+  background: #363636;
+  height: 0.313rem;
+  display: block;
+  border-radius: 3.125rem;
+}
+
+.card-body .progress .progress-bar:after {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  display: block;
+  border-radius: 3.125rem;
+}
+
+.card-body .progress span:first-of-type {
+  color: #fff;
+  text-align: left;
+  font-weight: 600;
+  width: 100%;
+  display: block;
+  margin-bottom: 0.313rem;
+}
+
+.card-body .progress span {
+  margin-top: 0.313rem;
+  text-align: right;
+  display: block;
+  color: #fff;
+}
+
+.card-footer {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  border-top: 0.063rem solid var(--blue-border);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 5px;
+  /* background: #151419; */
+  border-bottom-left-radius: 2.25rem;
+  border-bottom-right-radius: 2.25rem;
+}
+
+.card-footer .btn-countdown {
+  color: var(--card-txt);
+  border-radius: 2em;
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+  text-align: center;
+  font-size: 16px;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.green {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ 
+}
+
+.green:before {
+  background: linear-gradient(45deg, #313c69, #313c69, #313c69, #01ad9b, #01c3a8) border-box;
+}
+
+.green .btn-add {
+  background: #01c3a8;
+}
+
+.green .progress-bar:after {
+  width: 90%;
+  background: #01c3a8;
+}
+
+.blue {
+  background: linear-gradient(-45deg, #FFC796 0%, #FF6B95 100%) !important;
+}
+
+.blue:before {
+  background: linear-gradient(45deg, #313c69, #313c69, #313c69, #8d077b, #cd05a9) border-box;
+}
+
+.blue .btn-add {
+  background: #1890ff;
+}
+
+.blue .progress-bar:after {
+  width: 20%;
+  background: #1890ff;
+}
+
+.orange {
+  background: linear-gradient(15deg, #13547a 0%, #80d0c7 100%) !important;
+}
+
+.orange:before {
+  background: linear-gradient(45deg, #313c69, #313c69, #313c69, #d1820f, #ffb741) border-box;
+}
+
+.orange .btn-add {
+  background: #ffb741;
+}
+
+.orange .progress-bar:after {
+  width: 30%;
+  background: #ffb741;
+}
+
+.red {
+  background: linear-gradient(to top, #0ba360 0%, #3cba92 100%) !important;
+}
+
+.red:before {
+  background: linear-gradient(45deg, #313c69, #313c69, #313c69, #832033, #a63d2a) border-box;
+}
+
+.red .btn-add {
+  background: #a63d2a;
+}
+
+.red .progress-bar:after {
+  width: 50%;
+  background: #a63d2a;
+}
+
+
+.dark-blue {
+  background: linear-gradient(to top, #09203f 0%, #537895 100%) !important;
+}
+
+.dark-blue:before {
+  background: linear-gradient(45deg, #313c69, #313c69, #313c69, #832033, #a63d2a) border-box;
+}
+
+.dark-blue .btn-add {
+  background: #a63d2a;
+}
+
+.dark-blue .progress-bar:after {
+  width: 50%;
+  background: #a63d2a;
+}
+
+
+.pink{
+  background: linear-gradient(to right, #b8cbb8 0%, #b8cbb8 0%, #b465da 0%, #cf6cc9 33%, #ee609c 66%, #ee609c 100%) !important;
+}
+
+.pink:before {
+  background: linear-gradient(45deg, #313c69, #313c69, #313c69, #832033, #a63d2a) border-box;
+}
+
+.pink .btn-add {
+  background: #a63d2a;
+}
+
+.pink .progress-bar:after {
+  width: 50%;
+  background: #a63d2a;
+}
+
+.dashboard{
+  background: url(../img/box-bg.jpg);
+  background-size: cover;
+}
