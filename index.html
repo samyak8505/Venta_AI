@@ -1,244 +1,1137 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome To Our Company</title>
-    <link href="css/bootstrap.css" rel="stylesheet" />
-    <link href="css/dashboard-style.css" rel="stylesheet" />
-    <link href="css/animate.css" rel="stylesheet" />
-    <link href="css/card-style.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/easy-responsive-tabs.css">
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/css-pro-layout@1.1.0/dist/css/css-pro-layout.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css"
-    />
-    <link rel="stylesheet" href="css/side-menu-style.css" />
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome To Our Company</title>
 
-    <link
-      rel="stylesheet"
-      href="https://public.codepenassets.com/css/reset-2.0.min.css"
-    />
+  <link href="css/bootstrap.css" rel="stylesheet" />
+  <link href="css/dashboard-style.css" rel="stylesheet" />
+  <link href="css/animate.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/css-pro-layout@1.1.0/dist/css/css-pro-layout.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" />
+  <link rel="stylesheet" href="css/side-menu-style.css" />
+  <link rel="stylesheet" href="https://public.codepenassets.com/css/reset-2.0.min.css" />
 
-    
-  </head>
+  <!-- Small additions so the period labels act like buttons + tidy image sizing -->
+  <style>
+    .btn-radio {
+      display: inline-block;
+      cursor: pointer;
+      padding: 8px 14px;
+      border: 1px solid #1bb3c6;
+      border-radius: 8px;
+      margin: 6px 8px 0 0;
+      user-select: none;
+    }
+    .btn-radio.active,
+    .btn-radio:hover {
+      background: #1bb3c6;
+      color: #fff;
+    }
+    .menu-item.active > a .menu-title {
+      font-weight: 700;
+    }
+    .img-wrap img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+    .product-input {
+  padding: 8px 12px;
+  border: 1px solid #1bb3c6;
+  border-radius: 8px;
+  width: calc(100% - 90px); /* leave room for the Enter button */
+  margin-right: 8px;
+}
 
-  <body>
-    
+#btnProductSubmit {
+  display: inline-block;
+  cursor: pointer;
+  padding: 8px 14px;
+  border: 1px solid #1bb3c6;
+  border-radius: 8px;
+  background: #fff;
+  color: #000;
+}
+
+#btnProductSubmit:hover,
+#btnProductSubmit.active {
+  background: #1bb3c6;
+  color: #fff;
+}
+
+/* Force the plot and table to sit side-by-side under #results */
+/* Force the plot and table to sit side-by-side under #results */
+#results .row {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Each panel takes half width on desktop, wraps on small screens */
+#results .row > .col-md-6 {
+  flex: 1 1 50%;
+  min-width: 360px; /* tweak as you like */
+}
+
+/* Nice containers */
+#plotContainer, #tableContainer {
+  background: #fff;
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+#invplotContainer, #tableContainer {
+  background: #fff;
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+/* Table area can scroll */
+#tableContainer { max-height: 400px; overflow: auto; }
+
+table th {
+    text-align: center !important;
+    vertical-align: middle !important;
+  }
+  
+table td {
+    text-align: center;
+    vertical-align: middle;
+  }
+
+.headingitem{
+width: 1200px;
+text-align: center;
+}
+
+ .page { margin-top:20px; }
+
+  /* generic panel box look */
+  .panel {
+    background:#fff;
+    padding:12px;
+    border:1px solid #eee;
+    border-radius:8px;
+  }
+
+  /* let tables/long content scroll INSIDE the card, not the page */
+  #tableContainer,
+  #invTableContainer,
+  #invAnalyticsTableContainer {
+    max-height:420px;
+    overflow:auto;
+  }
+
+  /* never hard-fix widths; keep them fluid */
+  .fullwidth { width:100%; }
+
+  /* keep footer from overlapping tall pages */
+  .dashboard-layout { padding-bottom:80px; }
+
+  .info-card{
+  background:#fff;
+  border:1px solid #eee;
+  border-radius:12px;
+  padding:16px 20px;
+  box-shadow:0 2px 6px rgba(0,0,0,.05);
+}
+.info-card h4{
+  margin:0 0 8px 0;
+  font-weight:600;
+}
+.info-list{
+  margin:0;
+  padding-left:20px;
+  line-height:1.65;
+  color:#333;
+}
+.info-list li{ margin:4px 0; }
+.info-small{ color:#666; font-size:.92rem; }
+code{ background:#f7f7f9; border:1px solid #eee; border-radius:6px; padding:0 6px; }
+
+  #askAnythingSection{
+  margin-top: 0 !important;                    /* ignore the inline 20px margin */
+  margin-left: 260px;                          /* your sidebar width */
+  width: calc(100% - 260px);
+  height: calc(100vh - 120px);                 /* header+footer allowance (tweak if needed) */
+  background: #fff;
+  position: relative;
+  z-index: 1;
+}
+
+/* CRITICAL: override the inline height on the wrapper div */
+#askAnythingSection > div{
+  height: 100% !important;
+  min-height: 0 !important;
+  border: 0;
+}
+
+/* Let the iframe fill the wrapper */
+#askAnythingFrame{
+  width: 100%;
+  height: 100% !important;
+  border: 0;
+}
+
+:root{
+  --sidebar-w: 260px;
+  --header-h: 64px;
+  --footer-h: 64px;
+}
+
+/* Pin Ask to the viewport between header and footer, right of sidebar */
+#askAnythingSection{
+  position: fixed !important;
+  /* showOnly() still toggles display */
+  top: var(--header-h);
+  left: var(--sidebar-w);
+  right: 0;
+  bottom: var(--footer-h);
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #fff;
+  z-index: 5; /* below header overlay, above page content */
+}
+
+/* Nuke the inline sizing on the wrapper and let it stretch */
+#askAnythingSection > div{
+  height: 100% !important;
+  width: 100% !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Make the iframe fill everything */
+#askAnythingFrame{
+  width: 100% !important;
+  height: 100% !important;
+  border: 0 !important;
+  display: block;
+}
+
+/* === Inventory tabs: force layout to the right of the sidebar === */
+/* these CSS vars are set by the small JS we added; fallback keeps it safe */
+:root { --sidebar-w: 260px; }
+
+#inventorySection,
+#inventoryAnalyticsSection {
+  margin-left: var(--sidebar-w) !important;          /* override inline -100px */
+  width: calc(100% - var(--sidebar-w)) !important;
+  margin-left: -100px !important;/* fill the rest */
+  max-width: none !important;                         /* ignore Bootstrap .container cap */
+}
+
+/* keep rows edge-to-edge (prevents the feel of “shifting left”) */
+#inventorySection .row,
+#inventoryAnalyticsSection .row {
+  width: 1180px !important;
+  margin-right: 0 !important;
+}
+
+
+
+
+  </style>
+</head>
+<body>
+  <div class="layout has-sidebar fixed-sidebar fixed-header">
+    <aside id="sidebar" class="sidebar break-point-lg has-bg-image">
+      <div class="sidebar-layout">
+        <div class="header-top">
+          <h2><img src="img/logo.png" /></h2>
+        </div>
+        <div class="sidebar-content">
+          <nav class="menu open-current-submenu">
+            <ul>
+              <li class="menu-item active">
+                <a href="#" id="menuDashboard">
+                  <span class="menu-icon"><img src="img/dashboard.svg" /></span>
+                  <span class="menu-title">Dashboard</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="#" id="menuSalesForecasting">
+                  <span class="menu-icon"><img src="img/forcasting.svg" /></span>
+                  <span class="menu-title">Sales Forcasting </span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="#" id="menuInventoryForecasting">
+                  <span class="menu-icon"><img src="img/Inventory.svg" /></span>
+                  <span class="menu-title">Inventory Forcasting</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="#">
+                  <span class="menu-icon"><img src="img/customer-analytics.svg" /></span>
+                  <span class="menu-title">Customer Analytics</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="#">
+                  <span class="menu-icon"><img src="img/sales-analytics.svg" /></span>
+                  <span class="menu-title">Sales Analytics</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="#" id="menuInventoryAnalytics">
+                  <span class="menu-icon"><img src="img/Inventory-analytics.svg" /></span>
+                  <span class="menu-title">Inventory Analytics</span>
+                </a>
+              </li>
+              <li class="menu-item">
+              <a href="#" id="menuAskAnything">
+                <span class="menu-icon"><img src="img/chat.svg" /></span>
+                <span class="menu-title">Ask Anything</span>
+              </a>
+            </li>
+            </ul>
+          </nav>
+
+          <div class="chat-history">
+            <div class="chat-history-header">
+              <span class="menu-icon"><img src="img/chat-history.svg" /></span>
+              <span class="menu-title">Chats</span>
+            </div>
+            <ul id="chatHistoryList" class="chat-history-list">
+              <li>Sales Trends & Forecasting for Jan 2025</a></li>
+              <li>What will my sales look like in the next 30 days, broken down by category or region</a></li>
+              <li>>Who are my highest-value customers, and what is their predicted lifetime value?</a></li>
+              <li>Which customers are at risk of churn, and what actions should we take to retain them?</a></li>
+              <li>>Which products are trending, underperforming, or likely to go out of stock soon?</a></li>
+              <li>Can you segment customers into groups (e.g., VIP, new, discount-seekers, churn-risk)</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div id="overlay" class="overlay"></div>
+
+    <div class="layout">
+      <header class="header-top fixed-header">
+        <a id="btn-collapse" href="#"><i class="ri-menu-line ri-xl"></i></a>
+        <a id="btn-toggle" href="#" class="sidebar-toggler break-point-lg"><i class="ri-menu-line ri-xl"></i></a>
+        <div class="left-menu"><img src="img/tagline.png" alt="VentaAI" /></div>
+        <div class="right-menu">
+          <a href="#"><i class="ri-user-line"></i></a>
+          <a href="#"><i class="ri-user-settings-line"></i></a>
+          <a href="#"><i class="ri-shut-down-line"></i></a>
+        </div>
+      </header>
+
+      <main class="layout-content dashboard-layout">
+        <section id="dashboardSection" style="display:block; margin-top:20px;">
+          <div style="height: calc(100vh - 220px); min-height: 560px; border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+            <iframe
+              id="dashboardFrame"
+              src="dashboard.html"
+              style="width:100%; height:100%; border:0;"
+              allow="clipboard-write *; clipboard-read *">
+            </iframe>
+          </div>
+        </section>
+        <section id="forecastingSection" style="display:none;">
+        <div class="col-md-6">
+          <div class="card profile-card">
+            <div class="card-heading">
+              <h3>Choose Period</h3>
+            </div>
+            <ul class="option-list">
+              <li>
+                <input id="attribute_3008_3000" type="radio" name="attribute_3008" value="3000" checked />
+                <label class="btn-radio" data-period="1" for="attribute_3008_3000">Next Month</label>
+              </li>
+              <li>
+                <input id="attribute_3008_3001" type="radio" name="attribute_3008" value="3001" />
+                <label class="btn-radio" data-period="3" for="attribute_3008_3001">Next 3 Months</label>
+              </li>
+              <li>
+                <input id="attribute_3008_3002" type="radio" name="attribute_3008" value="3002" />
+                <label class="btn-radio" data-period="6" for="attribute_3008_3002">Next 6 Months</label>
+              </li>
+              <li>
+                <input id="attribute_3008_3003" type="radio" name="attribute_3008" value="3003" />
+                <label class="btn-radio" data-period="12" for="attribute_3008_3003">Next 12 months</label>
+              </li>
+            </ul>
+            <div class="clear"></div>
+          </div>
+        </div>
         
+
+        <div class="col-md-6">
+          <div class="card profile-card">
+            <div class="card-heading">
+              <h3>Choose Product</h3>
+            </div>
+           <ul class="option-list">
+  <li>
+    <input id="attribute_3008_3004" type="radio" name="attribute_3008" value="all" checked />
+    <label class="btn-radio active" data-product="all" for="attribute_3008_3004">All Products</label>
+  </li>
+</ul>
+
+<div class="product-input-row" style="margin-top:12px;">
+  <input
+    id="productIdInput"
+    type="number"
+    placeholder="Enter Product ID"
+    style="padding:8px 12px;border:1px solid #1bb3c6;border-radius:8px;width:calc(100% - 96px);margin-right:8px;background:#fff;"
+  />
+  <button
+    id="btnProductSubmit"
+    type="button"
+    class="btn-radio"
+    style="border:1px solid #1bb3c6;border-radius:8px;background:#fff;cursor:pointer;padding:8px 14px;"
+  >
+    Enter
+  </button>
+  </div>
+
+            <div class="clear"></div>
+          </div>
+        </div>
+
+        <!-- Results area -->
+        <section id="results" class="container" style="margin-top: 20px;">
+          <div class="row">
+            <div class="col-md-6" style="left: -600px;top: 50px;">
+              <h4 class="headingitem">Forecast Plot</h4>
+              <br><br>
+              <div id="plotContainer" class="img-wrap" style="background: #fff; padding: 12px; border: 1px solid #eee; border-radius: 8px; min-height:400px; text-align:center;width: 1170px;"></div>
+            </div>
+            <div class="col-md-6" style="left:-585px;margin-top: 20px;" >
+              <br><br><br>
+              <h4 class="headingitem">Forecast Table</h4>
+              <br>
+              <div id="tableContainer" style="background: #fff; padding: 12px; border: 1px solid #eee; border-radius: 8px; overflow: auto;text-align:center;width: 1170px;"></div>
+            </div>
+            <div class="col-md-6" style="left:-585px;">
+            <br><br><br>
+            <h4 class="headingitem">Forecast Assumptions</h4>
+            <br>
+            <div id="assumptionsContainer" class="container" style="margin-top: 20px;"></div>
+            </div>
+          </div>
+
+          </div>
+        </section>
+      </section>
+
+      <!-- INVENTORY FORECASTING (hidden by default, toggled from left menu) -->
+<section id="inventorySection" class="container page" style="display:none;margin-left:-100px;">
+  <div class="col-md-6">
+    <div class="card profile-card">
+      <div class="card-heading">
+        <h3>Choose Period</h3>
+      </div>
+      <ul class="option-list">
+        <li>
+          <input id="inv_period_1" type="radio" name="inv_period" value="1" checked>
+          <label class="btn-radio" data-inv-period="1" for="inv_period_1">Next Month</label>
+        </li>
+        <li>
+          <input id="inv_period_3" type="radio" name="inv_period" value="3">
+          <label class="btn-radio" data-inv-period="3" for="inv_period_3">Next 3 Months</label>
+        </li>
+        <li>
+          <input id="inv_period_6" type="radio" name="inv_period" value="6">
+          <label class="btn-radio" data-inv-period="6" for="inv_period_6">Next 6 Months</label>
+        </li>
+        <li>
+          <input id="inv_period_12" type="radio" name="inv_period" value="12">
+          <label class="btn-radio" data-inv-period="12" for="inv_period_12">Next 12 months</label>
+        </li>
+      </ul>
+      <div class="clear"></div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card profile-card">
+      <div class="card-heading">
+        <h3>Choose Product</h3>
+      </div>
+      <div class="product-input-row" style="margin-top:12px;">
+        <input
+          id="inventoryProductIdInput"
+          type="number"
+          placeholder="Enter Product ID"
+          style="padding:8px 12px;border:1px solid #1bb3c6;border-radius:8px;width:calc(100% - 96px);margin-right:8px;background:#fff;"
+        />
+        <button
+          id="btnInventorySubmit"
+          type="button"
+          class="btn-radio"
+          style="border:1px solid #1bb3c6;border-radius:8px;background:#fff;cursor:pointer;padding:8px 14px;"
+        >
+          Enter
+        </button>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+
+  <!-- Results area -->
+  <section id="inventoryResults" class="container" style="margin-top: 20px;">
+    <div class="row">
+      <div class="col-md-6" style="left: -600px; top: 100px;">
+        <h4 class="headingitem">Inventory Plot</h4>
+        <br><br>
+        <div id="invPlotContainer" class="img-wrap" style="background: #fff; padding: 12px; border: 1px solid #eee; border-radius: 8px; min-height:400px; text-align:center;width: 1170px;"></div>
+      </div class="headingitem">
+      <div class="col-md-6" style="margin-top: 140px;margin-bottom:100px;">
+        <h4 class="headingitem">Inventory Summary</h4>
+        <br><br>
+        <div id="invTableContainer" style="background: #fff; padding: 12px; border: 1px solid #eee; border-radius: 8px; overflow: auto;text-align:center;width: 1170px;"></div>
+      </div>
+    </div>
+  </section>
+</section>
+
+<main class="layout-content dashboard-layout" id="inventoryAnalyticsSection" style="display:none;">
+  <div class="col-md-12">
+    <div class="card profile-card">
+      <div class="card-heading"><h3>Inventory Analytics</h3></div>
+      <!-- Buttons -->
+      <div style="margin:12px 0;">
+        <button id="btnAllInventory" class="btn-radio active">All Products</button>
+        <button id="btnTop10Inventory" class="btn-radio">Top 10 Products</button>
+        <button id="btnBottom10Inventory" class="btn-radio">Bottom 10 Products</button>
+        <div style="margin-top:12px; display:flex; gap:8px;">
+        <input id="invProductIdInput" type="number" placeholder="Enter Product ID"
+               style="padding:8px;border:1px solid #1bb3c6;border-radius:8px;flex:1;min-width:200px;" />
+        <button id="btnInvProductSubmit" class="btn-radio" style="border:none;cursor:pointer;">Enter</button>
+      </div>
+      </div>
+      </div>
+      </div>
+      <!-- Product input -->
       
 
-        <main class="layout-content">
-          <div class="col-lg-12 col-md-12 padd-0 same-height">
-            
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 profile-box-wrapper">
-              <div class="col-md-12">
-                <h3 class="head-style"></h3>
-              </div> 
-              <div class="clear"></div>
-              <div class="col-md-12">
-              <div class="total-wegered-box">
-                <img src="img/ai-logo.png">
-                <h3 class="head-style">Welcome to AI Desk of</h3>
-                <img src="img/welcome-logo.png"/>
-              </div>
+      <!-- Results -->
+      <section id="inventoryAnalyticsContainer" class="container" style="margin-top:20px;margin-bottom:200px">
+        <div class="row">
+          <div class="col-md-12" style="margin-bottom:100px">
+            <h4 style="margin-left:600px;">Inventory Plan</h4>
+            <div id="invAnalyticsTableContainer"
+                 style="background:#fff;padding:12px;border:1px solid #eee;border-radius:8px;overflow:auto;max-height:400px;margin-top:20px;margin-bottom:50px;margin: left 100px;">
             </div>
-            </div>
-           
-            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 card-wrapper">
-              <div class="col-md-12">
-              <h3 class="head-style" style="margin-left: 250px;;">Key Highlights</h3>
-            </div>  
-              <div class="clear"></div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="card dashboard">
-                  <div class="card-body">
-                    <img src="img/analysis.png" width="60px" />
-                    <div class="clear"></div>
-                   
-                    <h3>16-05-2024 To 09-10-2025</h3>
-                 
-                  </div>
-                  <div class="card-footer">
-                    <p class="btn-countdown">Period for Analysis</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="card dashboard">
-                  <div class="card-body">
-                    <img src="img/countries.png" width="60px" />
-                    <h3>6</h3>
-                  </div>
-                  <div class="card-footer">
-                    <p class="btn-countdown">Operating Countries</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="card dashboard">
-                  <div class="card-body">
-                    <img src="img/distributors.png" width="60px" />
-                    <h3>6691</h3>
-                  </div>
-                  <div class="card-footer">
-                    <p class="btn-countdown">No of Distributors</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="card dashboard">
-                  <div class="card-body">
-                    <img src="img/orders.png" width="60px" />
-                    <h3>9179</h3>
-                  </div>
-                  <div class="card-footer">
-                    <p class="btn-countdown">No of Orders</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="card dashboard">
-                  <div class="card-body">
-                    <img src="img/revenue.png" width="60px" />
-                    <h3>$13974920.6412</h3>
-                  </div>
-                  <div class="card-footer">
-                    <p class="btn-countdown">Revenue</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="card dashboard">
-                  <div class="card-body">
-                    <img src="img/product.png" width="60px" />
-                    <h3>165</h3>
-                  </div>
-                  <div class="card-footer">
-                    <p class="btn-countdown">No of Products on Shelf</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <h4 style="margin-left:600px;">Table Inference</h4>
+            <div id="invAnalyticsNotesContainer" class="info-card" style="display:none;margin-top:20px;"></div>
           </div>
-    
-<div class="clear"></div>
-          <div class="technology-box " >
-            
-            <div class="avg-wager-head-box">
-              <h3 class="head-style" style="margin-left: 570px;">Technologies  Used </h3>
-              <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="techno-box">
-                  <img src="img/ai.gif">
-                   <h2>Artificial Intelligence</h2>
-                </div>
-              </div>
-              <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="techno-box">
-                  <img src="img/ml.gif">
-                   <h2>Machine Learnings</h2>
-                </div>
-              </div>
-              <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="techno-box">
-                  <img src="img/analytics.gif">
-                   <h2>Data Analytics</h2>
-                </div>
-              </div>
-             
-            </div>
-          </div>
-
-          <div class="clear"></div>
-          <div class="technology-box ">
           
-            <div class="col-md-6 col-sm-6 col-xs-12" style="margin: top 50px;">
-                <h3 class="head-style">AI capabilities </h3>
-                <div class="other-box">
-                  <ul class="bullet">
-                    <li>Prediction Models</li>
-                    <li>Actionable Alerts</li>
-                    <li>Modular Visuals</li>
-                    <li>Customer Segmentation</li>
-                    <li>Inventory Forecasting</li>
-                    <li>Chatbots and Virtual Assistance</li>
-                    <li>Supplier Performance Analytics</li>
-                    <li>Heatmap View</li>
-                    <li>Sentiment Analysis</li>
-                    <li>Many More...</li>
-                  </ul>
-                 
-                </div>
-              </div>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <h3 class="head-style">Key benefits </h3>
-                <div class="other-box">
-                  <ul class="bullet">
-                    <li>Personalize Recomandations</li>
-                    <li>Automated Inventory Pricing & demand forcasting</li>
-                    <li>Data driven Insights for markting & operations</li>
-                    <li>Scalable and self learning ML algorithm</li>
-                    <li>Improved customer service</li>
-                    <li>Help maximize revenue & stay competitive in the market</li>
-                    <li>Enhances trust & safety for customers</li>
-                    <li>Predective analysis identifies target customer segment </li>
-                    <li>ML algorithms tracks purchase patterns </li>
-                    <li>Scalable and contineuous learning improves over time as they process more data</li>
-                  </ul>
-                </div>
-              </div>
-            
-          </div>
-
-          <div class="clear"></div>
-             
-          <div class="top-brand-box">
-            <h3 class="head-style" style="margin-left:570px;">Global Brands using AI </h3>
-            <div class="top-brand">
-            <div class="col-md-2 col-sm-2 col-xs-6">
-              <img src="img/amazon.png" width="100%"">
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-6">
-              <img src="img/HM.png" width="100%""></div>
-            <div class="col-md-2 col-sm-2 col-xs-6">
-              <img src="img/alibaba.png" width="100%"></div>
-              <div class="col-md-2 col-sm-2 col-xs-6">
-                <img src="img/Nike.png" width="100%""></div>
-              <div class="col-md-2 col-sm-2 col-xs-6">
-                <img src="img/walmart.png" width="100%""></div>
-              
-            
-              <div class="col-md-2 col-sm-2 col-xs-6">
-              <img src="img/sephora.png" width="100%""></div>
-            
-              <div class="clear"></div>
-            </div>
-           
-           <div class="clear"></div>
-          </div>
-
-          
-
-        </main>
+        </div>
+      </section>
+ 
+</main>
 
 
-        
+
+
+      <section id="askAnythingSection" style="display:none; margin-top:20px;">
+    <div style="height: calc(100vh - 220px); min-height: 560px; border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+      <iframe
+        id="askAnythingFrame"
+        src="http://localhost:8501/?embed=true"
+        style="width:100%; height:100%; border:0;"
+        allow="clipboard-write *; clipboard-read *">
+      </iframe>
     </div>
-    <div class="background-img"></div>
+  </section>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src="js/side-menu-script.js"></script>
-    <script src="js/footer-offset.js"></script>
+      </main>
+
+      <div class="overlay"></div>
+      <footer class="app-footer">
+        <span>Copyright © 2025. All rights reserved. | Powerd by </span>
+        <img src="img/ventaai-footer.png" />
+      </footer>
+    </div>
+  </div>
+
+  <div class="background-img"></div>
+
+  <!-- Scripts (kept as-is) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="js/side-menu-script.js"></script>
+  <script src="js/footer-offset.js"></script>
+
+  <!-- Inline: Sales Forecasting wiring -->
+  <script>
+    // Point this to your FastAPI base URL
+    //"http://103.180.163.212:8000"
+    const API_BASE ="http://localhost:8000" ;
+    const tableContainer = document.getElementById("tableContainer");
+    const plotContainer = document.getElementById("plotContainer");
+   // ---- NEW: track mode and last product ----
+    let selectedMonths = 1;           // 1,3,6,12
+    let mode = "all";                 // "all" | "product"
+    let lastProductId = null;
+
+    const allRadio = document.getElementById("attribute_3008_3004");
+    const allLabel = document.querySelector('label[for="attribute_3008_3004"][data-product="all"]');
+
+    function setLoading(on) {
+      if (on) {
+        plotContainer.innerHTML = "<div>Loading…</div>";
+        tableContainer.innerHTML = "";
+      }
+    }
+
+    function escapeHtml(s) {
+      return String(s ?? "").replace(/[&<>\"']/g, (m) => (
+        {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        }[m])
+      );
+    }
+
+            function renderImageFromBase64(b64) {
+        if (!b64) { plotContainer.innerHTML = "<em>Not Enough Product History.</em>"; return; }
+        const img = new Image();
+        img.alt = "Forecast plot";
+        img.src = `data:image/png;base64,${b64}`;
+        img.style.maxWidth = "100%";
+        img.style.height = "auto";
+        plotContainer.innerHTML = "";
+        plotContainer.appendChild(img);
+        }
+
+        function renderTable(rows) {
+        if (!rows || !rows.length) { tableContainer.innerHTML = "<em>Not Enough Product History.</em>"; return; }
+        const headers = Object.keys(rows[0]);
+        const thead = "<thead><tr>" + headers.map((h) => `<th>${escapeHtml(h)}</th>`).join("") + "</tr></thead>";
+        const bodyRows = rows.map(r => "<tr>" + headers.map(h => `<td>${escapeHtml(r[h])}</td>`).join("") + "</tr>").join("");
+        const tbody = `<tbody>${bodyRows}</tbody>`;
+        tableContainer.innerHTML = `
+            <div style="max-height: 400px; overflow: auto; border: 1px solid #ccc; border-radius: 6px;">
+            <table class="table table-sm" style="border-collapse: collapse; white-space: nowrap; min-width: 600px;">
+                ${thead}${tbody}
+            </table>
+            </div>`;
+        }
+
+
+    // ---- API fetchers ----
+    async function fetchSalesForecast(months) {
+      clearForecastDisplay();
+      setLoading(true);
+      try {
+        const url = `${API_BASE}/sales_forecasting?months=${months}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(res.status + " " + res.statusText);
+        const json = await res.json();
+        renderImageFromBase64(json.plot);
+        renderTable(json.data);
+        renderAssumptions("sales");
+      } catch (err) {
+        plotContainer.innerHTML = "";
+        tableContainer.innerHTML = `<pre style="color:#c00;">${escapeHtml(err.message)}</pre>`;
+      }
+    }
+
+    async function fetchProductForecast(productId, months) {
+      clearForecastDisplay();
+      setLoading(true);
+      try {
+        const url = `${API_BASE}/product_sales_forecast?product_id=${productId}&months=${months}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(res.status + " " + res.statusText);
+        const json = await res.json();
+        renderImageFromBase64(json.plot);
+        renderTable(json.forecast);
+        renderAssumptions("product");
+      } catch (err) {
+        plotContainer.innerHTML = "";
+        tableContainer.innerHTML = `<pre style="color:#c00;">${escapeHtml(err.message)}</pre>`;
+      }
+    }
+
+    function markActive(el, groupSelector) {
+      document.querySelectorAll(groupSelector).forEach((n) => n.classList.remove("active"));
+      el.classList.add("active");
+    }
+
+    // ---- Period selection ----
+    document.querySelectorAll(".option-list .btn-radio[data-period]").forEach((label) => {
+  label.addEventListener("click", () => {
+    markActive(label, ".option-list .btn-radio[data-period]");
+    selectedMonths = label.getAttribute("data-period");
+
+    if (mode === "all") {
+      fetchSalesForecast(selectedMonths);
+    } else if (mode === "product" && lastProductId) {
+      fetchProductForecast(lastProductId, selectedMonths);
+    }
+  });
+});
+
+    // ---- Product forecast submit ----
+    if (allLabel) {
+  allLabel.addEventListener("click", () => {
+    mode = "all";
+    allRadio.checked = true;
+    allLabel.classList.add("active");
+    fetchSalesForecast(selectedMonths);
+  });
+}
+
+// Product forecast submit switches to product mode and unselects the All Products button
+const btnProductSubmit = document.getElementById("btnProductSubmit");
+const productInput = document.getElementById("productIdInput");
+
+if (btnProductSubmit) {
+  btnProductSubmit.addEventListener("click", () => {
+    const productId = (productInput?.value || "").trim();
+    if (!productId) { alert("Please enter a Product ID"); return; }
+
+    // switch mode
+    mode = "product";
+    lastProductId = productId;
+
+    // visually unselect "All Products"
+    if (allRadio) allRadio.checked = false;
+    if (allLabel) allLabel.classList.remove("active");
+
+    fetchProductForecast(productId, selectedMonths);
+  });
+}
+
+// Allow pressing Enter inside the input
+if (productInput) {
+  productInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") btnProductSubmit.click();
+  });
+}
+const ASK_URL  = "http://localhost:8501/?embed=true";
+
+
+
+
+ const forecastingSection = document.getElementById("forecastingSection");
+  const askSection = document.getElementById("askAnythingSection");
+  const askFrame   = document.getElementById("askAnythingFrame");
+  const askLink           = document.getElementById("menuAskAnything");
+  const salesLink         = document.getElementById("menuSalesForecasting");
+  const inventoryForecastingLink  = document.getElementById("menuInventoryForecasting");
+const inventoryAnalyticsLink    = document.getElementById("menuInventoryAnalytics");
+const dashboardLink      = document.getElementById("menuDashboard");
+const dashboardSection   = document.getElementById("dashboardSection");
+
+
+  function openAsk() {
+    if (askFrame && (!askFrame.src || askFrame.src === "about:blank")) {
+      askFrame.src = ASK_URL; // (re)load Streamlit when entering
+    }
+  }
+  function closeAsk() {
+    if (askFrame) askFrame.src = "about:blank"; // fully unload when leaving
+  }
+
+if (askLink) {
+  askLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    showOnly(askSection, askLink); // ← actually show the Ask Anything section
+    openAsk();                    // ← set/reload the iframe URL
+  });
+}
+
+
+  [dashboardLink, salesLink, inventoryForecastingLink, inventoryAnalyticsLink]
+    .filter(Boolean)
+    .forEach(el => el.addEventListener("click", () => closeAsk()));
+
+// Sections           // (inventory forecasting)
+const inventoryAnalyticsSection = document.getElementById("inventoryAnalyticsSection");   
+
+  function setActiveMenu(linkEl) {
+    document.querySelectorAll(".menu .menu-item").forEach(li => li.classList.remove("active"));
+    if (linkEl && linkEl.closest(".menu-item")) {
+      linkEl.closest(".menu-item").classList.add("active");
+    }
+  }
+
+  function showForecasting() {
+    if (askSection) askSection.style.display = "none";
+    if (forecastingSection) forecastingSection.style.display = "block";
+    setActiveMenu(salesLink);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function showAskAnything() {
+    if (forecastingSection) forecastingSection.style.display = "none";
+    if (askSection) {
+      askSection.style.display = "block";
+      if (askFrame && (!askFrame.src || askFrame.src === "about:blank")) {
+        askFrame.src = ASK_URL;        // (re)load when opening
+      }
+    }
+    setActiveMenu(askLink);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function hideAskAnything(){
+    if (askSection) askSection.style.display = "none";
+    if (askFrame)   askFrame.src = "about:blank";         // fully unload when leaving
+  }
+
+  // Menu click hooks
+
+
+
+  if (salesLink) {
+  salesLink.addEventListener("click", async (e) => {
+    e.preventDefault();
+    showOnly(forecastingSection, salesLink);
+    // run once on entering Sales (or always, up to you)
+    if (mode === "all") {
+      await fetchSalesForecast(selectedMonths);
+    } else if (mode === "product" && lastProductId) {
+      await fetchProductForecast(lastProductId, selectedMonths);
+    }
+  });
+}
+
+if (inventoryForecastingLink) {
+  inventoryForecastingLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    showOnly(inventorySection, inventoryForecastingLink);
+  });
+}
+
+if (inventoryAnalyticsLink) {
+  inventoryAnalyticsLink.addEventListener("click", async (e) => {
+    e.preventDefault();
+    showOnly(inventoryAnalyticsSection, inventoryAnalyticsLink);
+    // preload table when tab opens
+    const data = await fetchInventoryAnalysis();
+    renderInvTable(data);
+    // mark "All Products" active by default in this tab
+    markActiveAnalytics(document.getElementById("btnAllInventory"));
+    renderInventoryAnalyticsNotes();
+  });
+}
+
+
+  let invMonths = 1;
+
+  const invPlotContainer  = document.getElementById("invPlotContainer");
+  const invTableContainer = document.getElementById("invTableContainer");
+
+  // render helpers (reuse your existing escapeHtml)
+  function renderInvImageFromBase64(b64) {
+    if (!b64) { invPlotContainer.innerHTML = "<em>Not Enough Product History.</em>"; return; }
+    const img = new Image();
+    img.alt = "Inventory forecast plot";
+    img.src = `data:image/png;base64,${b64}`;
+    img.style.maxWidth = "100%";
+    img.style.height = "auto";
+    invPlotContainer.innerHTML = "";
+    invPlotContainer.appendChild(img);
+  }
+
+  function renderSummaryTable(summaryObj) {
+    if (!summaryObj || typeof summaryObj !== "object") {
+      invTableContainer.innerHTML = "<em>No summary.</em>";
+      return;
+    }
+    const rows = Object.keys(summaryObj).map(
+      k => `<tr><th style="text-align:left;padding-right:12px;">${escapeHtml(k)}</th><td>${escapeHtml(summaryObj[k])}</td></tr>`
+    ).join("");
+    invTableContainer.innerHTML = `
+      <div style="max-height: 400px; overflow:auto; border:1px solid #ccc; border-radius:6px;">
+        <table class="table table-sm" style="border-collapse:collapse; white-space:nowrap; min-width: 320px;">
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  async function fetchInventoryForecast(productId, months) {
+    // reuse your setLoading() if you want a shared spinner, but isolate to inventory containers:
+    invPlotContainer.innerHTML  = "<div>Loading…</div>";
+    invTableContainer.innerHTML = "";
+
+    try {
+      const url = `${API_BASE}/inventory_demand?product_id=${encodeURIComponent(productId)}&months=${encodeURIComponent(months)}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(res.status + " " + res.statusText);
+      const json = await res.json(); // { summary: {...}, plot: '...' }
+
+      renderInvImageFromBase64(json.plot);
+      renderSummaryTable(json.summary);
+    } catch (err) {
+      invPlotContainer.innerHTML  = "";
+      invTableContainer.innerHTML = `<pre style="color:#c00;white-space:pre-wrap;">${escapeHtml(err.message)}</pre>`;
+    }
+  }
+
+  // period buttons in inventory section
+  document.querySelectorAll('.option-list .btn-radio[data-inv-period]').forEach(lbl => {
+    lbl.addEventListener('click', () => {
+      document.querySelectorAll('.btn-radio[data-inv-period]').forEach(n => n.classList.remove('active'));
+      lbl.classList.add('active');
+      invMonths = lbl.getAttribute('data-inv-period');
+
+      // re-run if a product id is present
+      const pid = document.getElementById('inventoryProductIdInput')?.value?.trim();
+      if (pid) fetchInventoryForecast(pid, invMonths);
+    });
+  });
+
+  // submit in inventory section
+  const btnInvSubmit = document.getElementById('btnInventorySubmit');
+  const invInput     = document.getElementById('inventoryProductIdInput');
+
+  if (btnInvSubmit) {
+    btnInvSubmit.addEventListener('click', () => {
+      const pid = (invInput?.value || '').trim();
+      if (!pid) { alert('Please enter a Product ID'); return; }
+      fetchInventoryForecast(pid, invMonths);
+    });
+  }
+  if (invInput) {
+    invInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') btnInvSubmit?.click();
+    });
+  }
+
+  // --- Menu wiring so Inventory shows this section ---
+  const inventoryMenu = document.querySelector('.menu .menu-item a .menu-title')
+    ? Array.from(document.querySelectorAll('.menu .menu-item a'))
+        .find(a => a.textContent.trim().toLowerCase().includes('inventory forcasting'))
+    : null;
+
+ 
+  const inventorySection   = document.getElementById("inventorySection");
   
-    <!-- =====Tab Script===== -->
-       
-   
 
-  </body>
+function showOnly(sectionEl, linkEl) {
+  if (dashboardSection)        dashboardSection.style.display        = (sectionEl === dashboardSection) ? "block" : "none";
+  if (forecastingSection)      forecastingSection.style.display      = (sectionEl === forecastingSection) ? "block" : "none";
+  if (inventorySection)        inventorySection.style.display        = (sectionEl === inventorySection) ? "block" : "none";
+  if (inventoryAnalyticsSection) inventoryAnalyticsSection.style.display = (sectionEl === inventoryAnalyticsSection) ? "block" : "none";
+  if (askSection)              askSection.style.display              = (sectionEl === askSection) ? "block" : "none";
+
+  document.querySelectorAll(".menu .menu-item").forEach(li => li.classList.remove("active"));
+  if (linkEl && linkEl.closest(".menu-item")) linkEl.closest(".menu-item").classList.add("active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+if (dashboardLink) {
+  dashboardLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    showOnly(dashboardSection, dashboardLink);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  showOnly(dashboardSection, dashboardLink); // Dashboard first
+});
+
+
+  if (inventoryMenu) {
+    inventoryMenu.addEventListener('click', (e) => {
+      e.preventDefault();
+      showOnly(inventorySection, inventoryMenu);
+    });
+  }
+
+const invAnalyticsTableContainer = document.getElementById("invAnalyticsTableContainer");
+
+function renderInvTable(rows) {
+  if (!rows || !rows.length) {
+    invAnalyticsTableContainer.innerHTML = "<em>No data.</em>";
+    return;
+  }
+  const headers = Object.keys(rows[0]);
+  const thead = "<thead><tr>" + headers.map(h => `<th>${escapeHtml(h)}</th>`).join("") + "</tr></thead>";
+  const body = rows.map(r => "<tr>" + headers.map(h => `<td>${escapeHtml(r[h])}</td>`).join("") + "</tr>").join("");
+  invAnalyticsTableContainer.innerHTML = `
+    <div style="max-height:400px;overflow:auto;border:1px solid #ccc;border-radius:6px;">
+      <table class="table table-sm" style="border-collapse:collapse;white-space:nowrap;min-width:800px;">
+        ${thead}<tbody>${body}</tbody>
+      </table>
+    </div>`;
+}
+
+async function fetchInventoryAnalysis() {
+  invAnalyticsTableContainer.innerHTML = "Loading…";
+  try {
+    const res = await fetch(`${API_BASE}/inventory_analysis`);
+    if (!res.ok) throw new Error(res.status + " " + res.statusText);
+    const json = await res.json();
+    return json.plan || [];
+  } catch (err) {
+    invAnalyticsTableContainer.innerHTML = `<pre style="color:#c00;">${escapeHtml(err.message)}</pre>`;
+    return [];
+  }
+}
+
+// Buttons (scoped to analytics section)
+const btnAllInventory = document.getElementById("btnAllInventory");
+const btnTop10Inventory = document.getElementById("btnTop10Inventory");
+const btnBottom10Inventory = document.getElementById("btnBottom10Inventory");
+const btnInvProductSubmit = document.getElementById("btnInvProductSubmit");
+
+function markActiveAnalytics(el){
+  document.querySelectorAll("#inventoryAnalyticsSection .btn-radio").forEach(n=>n.classList.remove("active"));
+  el.classList.add("active");
+}
+
+btnAllInventory.addEventListener("click", async () => {
+  markActiveAnalytics(btnAllInventory);
+  const data = await fetchInventoryAnalysis();
+  renderInvTable(data);
+  renderInventoryAnalyticsNotes();
+});
+
+btnTop10Inventory.addEventListener("click", async () => {
+  markActiveAnalytics(btnTop10Inventory);
+  const data = await fetchInventoryAnalysis();
+  renderInvTable(data.slice(0, 10));
+  renderInventoryAnalyticsNotes();
+});
+
+btnBottom10Inventory.addEventListener("click", async () => {
+  markActiveAnalytics(btnBottom10Inventory);
+  const data = await fetchInventoryAnalysis();
+  renderInvTable(data.slice(-10));
+  renderInventoryAnalyticsNotes();
+});
+
+document.getElementById("btnInvProductSubmit").addEventListener("click", async () => {
+  const pid = document.getElementById("invProductIdInput").value.trim();
+  if (!pid) return alert("Enter Product ID");
+  const data = await fetchInventoryAnalysis();
+  renderInvTable(data.filter(r => String(r.ProductId) === pid));
+  renderInventoryAnalyticsNotes();
+});
+
+if (inventoryForecastingLink) {
+  inventoryForecastingLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    showOnly(inventorySection, inventoryForecastingLink);
+  });
+}
+
+const assumptionsContainer = document.getElementById("assumptionsContainer");
+
+function renderAssumptions(kind) {
+  const container = document.getElementById("assumptionsContainer");
+  if (!container) return;
+
+  let title = "";
+  let items = [];
+
+  if (kind === "sales") {
+    items = [
+      "<strong>Forecasting Model Used:</strong> Prophet — Models time series data by fitting trend, seasonality, and holiday components using a logistic model.",
+      "<strong>Growth Type:</strong> Logistic — The growth starts rapidly but slows down as it reaches maximum limit(ensuring the forecast stays with the cap and floor values).",
+      "<strong>Cap Value:</strong> 1.2 × max(sales) → limits how high forecasts can go.",,
+      "<strong>Floor Value:</strong> 5% × average(sales) → limits how low forecasts can go.",
+      "<strong>Seasonality:</strong> Yearly pattern detection for recurring sales cycles.",
+      "<strong>Outlier Handling:</strong> Removes extreme data spikes using IQR (Interquartile Range)."
+    ];
+  } else if (kind === "product") {
+    items = [
+      "<strong>Forecasting Model Used:</strong> Prophet — Models time series data by fitting trend, seasonality, and holiday components using a model.",
+      "<strong>Growth Type:</strong> Logistic — The growth starts rapidly but slows down as it reaches maximum limit(ensuring the forecast stays with the cap and floor values).",
+      "<strong>Cap Value:</strong> 1.2 × max(sales) → sets realistic upper growth limit.",
+      "<strong>Floor Value:</strong> 0.5 × min(sales) → ensures a realistic demand baseline.",
+      "<strong>Seasonality:</strong> Detects repeating yearly demand cycles.",
+      "<strong>Minimum Data Requirement:</strong> Product must have at least 6 months of sales history."
+    ];
+  }
+
+  const html = `
+    <div style="
+      background: #fff;
+      padding: 16px 20px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      margin-top: 20px;
+      margin-top:-10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    ">
+      <h4 style="margin-bottom:12px;">${title}</h4>
+      <ul style="margin:0; padding-left:20px; line-height:1.6; color:#333;">
+        ${items.map(i => `<li>${i}</li>`).join("")}
+      </ul>
+    </div>
+  `;
+  container.innerHTML = html;
+}
+
+
+function clearForecastDisplay() {
+  plotContainer.innerHTML = "";
+  tableContainer.innerHTML = "";
+  if (assumptionsContainer) assumptionsContainer.innerHTML = "";
+}
+function renderInventoryAnalyticsNotes() {
+  const el = document.getElementById("invAnalyticsNotesContainer");
+  if (!el) return;
+
+  el.style.display = "block";
+  el.innerHTML = `
+    <h4>Inventory Analytics — What the columns mean</h4>
+    <ul class="info-list">
+      <li><strong>AvgMonthlyDemand</strong> —The average of total quantities sold per month for each product.</li>
+      <li><strong>DemandStdDev</strong> — The standard deviation of monthly sales — measures how much demand varies.</li>
+      <li><strong>SafetyStock</strong> — Extra stock based on demand variability, service level (z), and lead time.:
+        <code>Safety = z × σ × √(Lead&nbsp;Time)</code>
+        <span class="info-small">(z ≈ 1.65 for ~95% service,lead time=2 months by default)</span>
+      </li>
+      <li><strong>ReorderPoint</strong> — Expected demand during lead time plus the safety buffer:
+        <code>ROP = Avg&nbsp;Demand × Lead&nbsp;Time + Safety</code>
+      </li>
+      <li><strong>CurrentStock</strong> — In-hand units from your inventory data.</li>
+      <li><strong>Recommendation</strong> — <em>Reorder Needed</em> if
+        <code>CurrentStock &lt; ROP</code>, otherwise <em>OK</em>.
+      </li>
+    </ul>
+  `;
+}
+
+(function(){
+  const root    = document.documentElement;
+  const header  = document.querySelector('.header-top.fixed-header');
+  const sidebar = document.getElementById('sidebar');
+  const footer  = document.querySelector('.app-footer');
+
+  function setPaneVars(){
+    const headerH  = header  ? header.offsetHeight  : 0;
+    const footerH  = footer  ? footer.offsetHeight  : 0;
+    const sidebarW = sidebar ? sidebar.offsetWidth  : 0;
+    root.style.setProperty('--header-h',  headerH  + 'px');
+    root.style.setProperty('--footer-h',  footerH  + 'px');
+    root.style.setProperty('--sidebar-w', sidebarW + 'px');
+  }
+
+  // initial + responsive
+  window.addEventListener('load', setPaneVars);
+  window.addEventListener('resize', setPaneVars);
+
+  // re-measure when the sidebar is toggled/collapsed
+  ['btn-collapse','btn-toggle'].forEach(id=>{
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('click', () => setTimeout(setPaneVars, 300));
+  });
+  if (sidebar) sidebar.addEventListener('transitionend', setPaneVars);
+})();
+
+  </script>
+</body>
 </html>
