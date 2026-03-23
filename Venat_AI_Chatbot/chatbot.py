@@ -6,14 +6,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from langchain_openai import ChatOpenAI
 from langchain_community.utilities import SQLDatabase
-from langchain.agents import create_sql_agent, AgentType
+from langchain_community.agent_toolkits.sql.base import create_sql_agent
+from langchain.agents import AgentType
 import re
 import subprocess
 import uuid
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from langchain_community.agent_toolkits.sql.base import create_sql_agent
 import json
 from dotenv import load_dotenv
 load_dotenv()  # reads .env in dev; on server we'll use System env vars
