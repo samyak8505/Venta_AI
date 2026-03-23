@@ -7,7 +7,6 @@ import pandas as pd
 from langchain_openai import ChatOpenAI
 from langchain_community.utilities import SQLDatabase
 from langchain_community.agent_toolkits.sql.base import create_sql_agent
-from langchain.agents import AgentType
 import re
 import subprocess
 import uuid
