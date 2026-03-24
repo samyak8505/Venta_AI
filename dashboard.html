@@ -60,7 +60,7 @@
                     <img src="img/analysis.png" width="60px" />
                     <div class="clear"></div>
                    
-                    <h3>16-05-2024 To 09-10-2025</h3>
+                    <h3 id="stat-period">Loading...</h3>
                  
                   </div>
                   <div class="card-footer">
@@ -72,7 +72,7 @@
                 <div class="card dashboard">
                   <div class="card-body">
                     <img src="img/countries.png" width="60px" />
-                    <h3>6</h3>
+                    <h3 id="stat-countries">...</h3>
                   </div>
                   <div class="card-footer">
                     <p class="btn-countdown">Operating Countries</p>
@@ -83,7 +83,7 @@
                 <div class="card dashboard">
                   <div class="card-body">
                     <img src="img/distributors.png" width="60px" />
-                    <h3>6691</h3>
+                    <h3 id="stat-distributors">...</h3>
                   </div>
                   <div class="card-footer">
                     <p class="btn-countdown">No of Distributors</p>
@@ -94,7 +94,7 @@
                 <div class="card dashboard">
                   <div class="card-body">
                     <img src="img/orders.png" width="60px" />
-                    <h3>9179</h3>
+                    <h3 id="stat-orders">...</h3>
                   </div>
                   <div class="card-footer">
                     <p class="btn-countdown">No of Orders</p>
@@ -105,7 +105,7 @@
                 <div class="card dashboard">
                   <div class="card-body">
                     <img src="img/revenue.png" width="60px" />
-                    <h3>$13974920.6412</h3>
+                    <h3 id="stat-revenue">...</h3>
                   </div>
                   <div class="card-footer">
                     <p class="btn-countdown">Revenue</p>
@@ -117,7 +117,7 @@
                 <div class="card dashboard">
                   <div class="card-body">
                     <img src="img/product.png" width="60px" />
-                    <h3>165</h3>
+                    <h3 id="stat-products">...</h3>
                   </div>
                   <div class="card-footer">
                     <p class="btn-countdown">No of Products on Shelf</p>
@@ -237,6 +237,37 @@
     <script src="js/footer-offset.js"></script>
   
     <!-- =====Tab Script===== -->
+     <script>
+      const API_BASE = "https://heartfelt-endurance-production.up.railway.app";
+
+      async function loadDashboardStats() {
+        try {
+          const res  = await fetch(`${API_BASE}/dashboard_stats`);
+          if (!res.ok) throw new Error(res.statusText);
+          const data = await res.json();
+
+          document.getElementById("stat-period").textContent       = data.period;
+          document.getElementById("stat-countries").textContent    = data.countries;
+          document.getElementById("stat-distributors").textContent = data.distributors;
+          document.getElementById("stat-orders").textContent       = data.orders;
+          document.getElementById("stat-revenue").textContent      = data.revenue;
+          document.getElementById("stat-products").textContent     = data.products;
+
+        } catch (err) {
+          console.error("Dashboard stats failed:", err);
+          // fallback — keep showing Loading... or show error
+          ["stat-period","stat-countries","stat-distributors",
+          "stat-orders","stat-revenue","stat-products"]
+            .forEach(id => {
+              const el = document.getElementById(id);
+              if (el && el.textContent === "...") el.textContent = "N/A";
+            });
+        }
+      }
+
+      // Run on page load
+      window.addEventListener("DOMContentLoaded", loadDashboardStats);
+  </script>
        
    
 

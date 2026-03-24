@@ -986,6 +986,62 @@ def run_inventory_analysis():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Inventory analysis failed: {e}")
 
+@app.get("/dashboard_stats")
+def get_dashboard_stats():
+    try:
+        with engine.connect() as conn:
+            first_order = pd.read_sql(
+                "SELECT dbo.fnGetLocalDate(CreatedOnUtc) AS FirstOrderDate FROM dbo.[Order] WITH (NOLOCK) WHERE id=1",
+                conn
+            ).iloc[0]["FirstOrderDate"]
+
+            last_order = pd.read_sql(
+                "SELECT TOP 1 dbo.fnGetLocalDate(CreatedOnUtc) AS LastOrderDate FROM [Order] WITH (NOLOCK) ORDER BY id DESC",
+                conn
+            ).iloc[0]["LastOrderDate"]
+
+            countries = pd.read_sql(
+                "SELECT COUNT(id) AS Country FROM dbo.Country WITH (NOLOCK) WHERE Published=1",
+                conn
+            ).iloc[0]["Country"]
+
+            distributors = pd.read_sql(
+                "SELECT COUNT(MPD_Id) AS NoOfDistributors FROM dbo.MemProfile_Dtls WITH (NOLOCK) INNER JOIN dbo.MemJoining_Dtls WITH (NOLOCK) ON MemJoining_Dtls.MJD_MemID = MemProfile_Dtls.MPD_MemId",
+                conn
+            ).iloc[0]["NoOfDistributors"]
+
+            orders = pd.read_sql(
+                "SELECT COUNT(Id) AS NoOfOrders FROM dbo.[Order] WITH (NOLOCK)",
+                conn
+            ).iloc[0]["NoOfOrders"]
+
+            revenue = pd.read_sql(
+                "SELECT SUM(OrderTotal) AS TotalSales FROM dbo.[Order] WITH (NOLOCK)",
+                conn
+            ).iloc[0]["TotalSales"]
+
+            products = pd.read_sql(
+                "SELECT COUNT(*) AS NoOfProducts FROM dbo.Product WITH (NOLOCK)",
+                conn
+            ).iloc[0]["NoOfProducts"]
+
+        # Format dates
+        def fmt_date(d):
+            if pd.isnull(d): return "N/A"
+            return pd.Timestamp(d).strftime("%d-%m-%Y")
+
+        return {
+            "period":       f"{fmt_date(first_order)} To {fmt_date(last_order)}",
+            "countries":    int(countries),
+            "distributors": int(distributors),
+            "orders":       int(orders),
+            "revenue":      f"${float(revenue):,.2f}",
+            "products":     int(products)
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Dashboard stats failed: {e}")
+
 
 #uvicorn backend:app --host 0.0.0.0 --port 8000
 #streamlit run chatbot.py --server.port 8501 --server.address 0.0.0.0
