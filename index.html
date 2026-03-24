@@ -104,8 +104,8 @@ table td {
   }
 
 .headingitem{
-width: 1200px;
-text-align: center;
+  width: 100%;
+  text-align: center;
 }
 
  .page { margin-top:20px; }
@@ -398,6 +398,7 @@ code{ background:#f7f7f9; border:1px solid #eee; border-radius:6px; padding:0 6p
           </div>
         </div>
 
+        <!-- Results area -->
         <!-- Results area -->
         <section id="results" class="container" style="margin-top: 20px;">
           <div class="row">
@@ -792,17 +793,24 @@ const inventoryAnalyticsSection = document.getElementById("inventoryAnalyticsSec
 
 
   if (salesLink) {
-  salesLink.addEventListener("click", async (e) => {
-    e.preventDefault();
-    showOnly(forecastingSection, salesLink);
-    // run once on entering Sales (or always, up to you)
-    if (mode === "all") {
+    salesLink.addEventListener("click", async (e) => {
+      e.preventDefault();
+      showOnly(forecastingSection, salesLink);
+
+      // Always highlight Next Month button as active when entering
+      const nextMonthLabel = document.querySelector('.btn-radio[data-period="1"]');
+      if (nextMonthLabel) {
+        document.querySelectorAll('.btn-radio[data-period]').forEach(n => n.classList.remove('active'));
+        nextMonthLabel.classList.add('active');
+      }
+      selectedMonths = 1;
+      mode = "all";
+
+      // Always fetch on entering the section
       await fetchSalesForecast(selectedMonths);
-    } else if (mode === "product" && lastProductId) {
-      await fetchProductForecast(lastProductId, selectedMonths);
-    }
-  });
-}
+    });
+  }
+
 
 if (inventoryForecastingLink) {
   inventoryForecastingLink.addEventListener("click", (e) => {
