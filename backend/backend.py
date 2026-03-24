@@ -291,12 +291,7 @@ def sales_forecast_limited(sales_df, forecast_months):
         label='Historical', color='#1f77b4',
         marker='o', linewidth=2, markersize=5, zorder=3
     )
-    if not outliers.empty:
-        ax.scatter(
-            outliers['ds'], outliers['y'],
-            color='#aaaaaa', marker='x', s=70, linewidths=2,
-            zorder=4, label='Excluded Outlier (DB glitch)'
-        )
+    
     # Bridge point: last historical value connects to first forecast point
     last_hist_ds = monthly_clean['ds'].iloc[-1]
     last_hist_y  = monthly_clean['y'].iloc[-1]
@@ -312,11 +307,7 @@ def sales_forecast_limited(sales_df, forecast_months):
         label='Forecast', color='#ff7f0e',
         linestyle='--', linewidth=2.2, zorder=3
     )
-    ax.axhline(
-        y=min_floor, color='red', linestyle=':',
-        alpha=0.4, linewidth=1,
-        label=f'Min Floor ({min_floor:,.0f})'
-    )
+    
 
     y_max = max(monthly_clean['y'].max(), forecast.loc[forecast_mask, 'yhat_upper'].max())
     ax.set_ylim(0, y_max * 1.20)
