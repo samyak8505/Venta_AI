@@ -418,73 +418,78 @@ code{ background:#f7f7f9; border:1px solid #eee; border-radius:6px; padding:0 6p
       </section>
 
       <!-- INVENTORY FORECASTING (hidden by default, toggled from left menu) -->
-<section id="inventorySection" class="container page" style="display:none;margin-left:-100px;">
-  <div class="col-md-6">
-    <div class="card profile-card">
-      <div class="card-heading">
-        <h3>Choose Period</h3>
+<section id="inventorySection" class="page" style="display:none;">
+
+  <div class="row">
+    <!-- Period -->
+    <div class="col-md-6">
+      <div class="card profile-card">
+        <div class="card-heading">
+          <h3>Choose Period</h3>
+        </div>
+        <ul class="option-list">
+          <li>
+            <input id="inv_period_1" type="radio" name="inv_period" value="1" checked>
+            <label class="btn-radio" data-inv-period="1" for="inv_period_1">Next Month</label>
+          </li>
+          <li>
+            <input id="inv_period_3" type="radio" name="inv_period" value="3">
+            <label class="btn-radio" data-inv-period="3" for="inv_period_3">Next 3 Months</label>
+          </li>
+          <li>
+            <input id="inv_period_6" type="radio" name="inv_period" value="6">
+            <label class="btn-radio" data-inv-period="6" for="inv_period_6">Next 6 Months</label>
+          </li>
+          <li>
+            <input id="inv_period_12" type="radio" name="inv_period" value="12">
+            <label class="btn-radio" data-inv-period="12" for="inv_period_12">Next 12 months</label>
+          </li>
+        </ul>
       </div>
-      <ul class="option-list">
-        <li>
-          <input id="inv_period_1" type="radio" name="inv_period" value="1" checked>
-          <label class="btn-radio" data-inv-period="1" for="inv_period_1">Next Month</label>
-        </li>
-        <li>
-          <input id="inv_period_3" type="radio" name="inv_period" value="3">
-          <label class="btn-radio" data-inv-period="3" for="inv_period_3">Next 3 Months</label>
-        </li>
-        <li>
-          <input id="inv_period_6" type="radio" name="inv_period" value="6">
-          <label class="btn-radio" data-inv-period="6" for="inv_period_6">Next 6 Months</label>
-        </li>
-        <li>
-          <input id="inv_period_12" type="radio" name="inv_period" value="12">
-          <label class="btn-radio" data-inv-period="12" for="inv_period_12">Next 12 months</label>
-        </li>
-      </ul>
-      <div class="clear"></div>
+    </div>
+
+    <!-- Product -->
+    <div class="col-md-6">
+      <div class="card profile-card">
+        <div class="card-heading">
+          <h3>Choose Product</h3>
+        </div>
+
+        <div class="product-input-row" style="margin-top:12px;">
+          <input
+            id="inventoryProductIdInput"
+            type="number"
+            placeholder="Enter Product ID"
+            style="padding:8px 12px;border:1px solid #1bb3c6;border-radius:8px;width:calc(100% - 96px);margin-right:8px;background:#fff;"
+          />
+          <button
+            id="btnInventorySubmit"
+            type="button"
+            class="btn-radio"
+            style="border:1px solid #1bb3c6;border-radius:8px;background:#fff;cursor:pointer;padding:8px 14px;"
+          >
+            Enter
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="col-md-6">
-    <div class="card profile-card">
-      <div class="card-heading">
-        <h3>Choose Product</h3>
-      </div>
-      <div class="product-input-row" style="margin-top:12px;">
-        <input
-          id="inventoryProductIdInput"
-          type="number"
-          placeholder="Enter Product ID"
-          style="padding:8px 12px;border:1px solid #1bb3c6;border-radius:8px;width:calc(100% - 96px);margin-right:8px;background:#fff;"
-        />
-        <button
-          id="btnInventorySubmit"
-          type="button"
-          class="btn-radio"
-          style="border:1px solid #1bb3c6;border-radius:8px;background:#fff;cursor:pointer;padding:8px 14px;"
-        >
-          Enter
-        </button>
-      </div>
-      <div class="clear"></div>
-    </div>
-  </div>
+  <!-- Results -->
+  <section id="inventoryResults" style="margin-top:20px; width:100%; padding:0 16px; box-sizing:border-box;">
 
-  <!-- Results area -->
-  <section id="inventoryResults" class="container" style="margin-top: 20px;">
-    <div class="row">
-      <div class="col-md-6" style="left: -600px; top: 100px;">
-        <h4 class="headingitem">Inventory Plot</h4>
-        <br><br>
-        <div id="invPlotContainer" class="img-wrap" style="background: #fff; padding: 12px; border: 1px solid #eee; border-radius: 8px; min-height:400px; text-align:center;width: 1170px;"></div>
-      </div class="headingitem">
-      <div class="col-md-6" style="margin-top: 140px;margin-bottom:100px;">
-        <h4 class="headingitem">Inventory Summary</h4>
-        <br><br>
-        <div id="invTableContainer" style="background: #fff; padding: 12px; border: 1px solid #eee; border-radius: 8px; overflow: auto;text-align:center;width: 1170px;"></div>
-      </div>
+    <!-- Plot -->
+    <h4 style="text-align:center; margin-bottom:12px;">Inventory Plot</h4>
+    <div id="invPlotContainer" class="img-wrap"
+      style="background:#fff; padding:12px; border:1px solid #eee; border-radius:8px; min-height:400px; text-align:center; width:100%; box-sizing:border-box;">
     </div>
+
+    <!-- Table -->
+    <h4 style="text-align:center; margin:24px 0 12px;">Inventory Summary</h4>
+    <div id="invTableContainer"
+      style="background:#fff; padding:12px; border:1px solid #eee; border-radius:8px; overflow:auto; width:100%; box-sizing:border-box;">
+    </div>
+
   </section>
 </section>
 
