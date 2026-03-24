@@ -1,0 +1,8 @@
+:8080 {
+    root * .
+    file_server
+
+    header Content-Security-Policy "default-src 'self' https: data: 'unsafe-inline'; img-src 'self' data: https: blob:; connect-src 'self' https:; frame-src 'self' https:; script-src 'self' https: 'unsafe-inline'; style-src 'self' https: 'unsafe-inline';"
+    header X-Frame-Options "SAMEORIGIN"
+    header X-Content-Type-Options "nosniff"
+}
