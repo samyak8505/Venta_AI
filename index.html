@@ -104,8 +104,8 @@ table td {
   }
 
 .headingitem{
-  width: 100%;
-  text-align: center;
+width: 1200px;
+text-align: center;
 }
 
  .page { margin-top:20px; }
@@ -345,7 +345,7 @@ code{ background:#f7f7f9; border:1px solid #eee; border-radius:6px; padding:0 6p
             <ul class="option-list">
               <li>
                 <input id="attribute_3008_3000" type="radio" name="attribute_3008" value="3000" checked />
-                <label class="btn-radio" data-period="1" for="attribute_3008_3000">Next Month</label>
+                <label class="btn-radio active" data-period="1" for="attribute_3008_3000">Next Month</label>
               </li>
               <li>
                 <input id="attribute_3008_3001" type="radio" name="attribute_3008" value="3001" />
@@ -401,20 +401,22 @@ code{ background:#f7f7f9; border:1px solid #eee; border-radius:6px; padding:0 6p
         <!-- Results area -->
         <!-- Results area -->
         <section id="results" style="margin-top: 20px; width: 100%; padding: 0 16px; box-sizing: border-box;">
-
-          <!-- Plot -->
-          <h4 style="text-align:center; margin-bottom:12px;">Forecast Plot</h4>
-          <div id="plotContainer" class="img-wrap" style="background:#fff; padding:12px; border:1px solid #eee; border-radius:8px; min-height:400px; text-align:center; width:100%; box-sizing:border-box;"></div>
-
-          <!-- Table -->
-          <h4 style="text-align:center; margin:24px 0 12px;">Forecast Table</h4>
-          <div id="tableContainer" style="background:#fff; padding:12px; border:1px solid #eee; border-radius:8px; overflow:auto; width:100%; box-sizing:border-box;"></div>
-
-          <!-- Assumptions -->
-          <h4 style="text-align:center; margin:24px 0 12px;">Forecast Assumptions</h4>
-          <div id="assumptionsContainer" style="width:100%; box-sizing:border-box; margin-bottom:40px;"></div>
-
+          <div class="row">
+            <div class="col-md-6" style="width:100%; max-width:100%; float:none; margin-bottom:24px;">
+              <h4 style="text-align:center;">Forecast Plot</h4>
+              <div id="plotContainer" class="img-wrap" style="background:#fff; padding:12px; border:1px solid #eee; border-radius:8px; min-height:400px; text-align:center; width:100%; box-sizing:border-box;"></div>
+            </div>
+            <div class="col-md-6" style="width:100%; max-width:100%; float:none; margin-bottom:24px;">
+              <h4 style="text-align:center;">Forecast Table</h4>
+              <div id="tableContainer" style="background:#fff; padding:12px; border:1px solid #eee; border-radius:8px; overflow:auto; max-height:400px; text-align:center; width:100%; box-sizing:border-box;"></div>
+            </div>
+            <div class="col-md-6" style="width:100%; max-width:100%; float:none; margin-bottom:24px;">
+              <h4 style="text-align:center;">Forecast Assumptions</h4>
+              <div id="assumptionsContainer" style="width:100%; box-sizing:border-box;"></div>
+            </div>
+          </div>
         </section>
+      </section>
 
       <!-- INVENTORY FORECASTING (hidden by default, toggled from left menu) -->
 <section id="inventorySection" class="container page" style="display:none;margin-left:-100px;">
@@ -471,21 +473,19 @@ code{ background:#f7f7f9; border:1px solid #eee; border-radius:6px; padding:0 6p
   </div>
 
   <!-- Results area -->
-  <section id="inventoryResults" class="container" style="margin-top: 20px;">
+  <!-- Results area -->
+  <section id="inventoryResults" style="margin-top: 20px; width:100%; padding: 0 16px; box-sizing:border-box;">
     <div class="row">
-      <div class="col-md-6" style="left: -600px; top: 100px;">
-        <h4 class="headingitem">Inventory Plot</h4>
-        <br><br>
-        <div id="invPlotContainer" class="img-wrap" style="background: #fff; padding: 12px; border: 1px solid #eee; border-radius: 8px; min-height:400px; text-align:center;width: 1170px;"></div>
-      </div class="headingitem">
-      <div class="col-md-6" style="margin-top: 140px;margin-bottom:100px;">
-        <h4 class="headingitem">Inventory Summary</h4>
-        <br><br>
-        <div id="invTableContainer" style="background: #fff; padding: 12px; border: 1px solid #eee; border-radius: 8px; overflow: auto;text-align:center;width: 1170px;"></div>
+      <div class="col-md-6" style="width:100%; max-width:100%; float:none; margin-bottom:24px;">
+        <h4 style="text-align:center;">Inventory Plot</h4>
+        <div id="invPlotContainer" class="img-wrap" style="background:#fff; padding:12px; border:1px solid #eee; border-radius:8px; min-height:400px; text-align:center; width:100%; box-sizing:border-box;"></div>
+      </div>
+      <div class="col-md-6" style="width:100%; max-width:100%; float:none; margin-bottom:40px;">
+        <h4 style="text-align:center;">Inventory Summary</h4>
+        <div id="invTableContainer" style="background:#fff; padding:12px; border:1px solid #eee; border-radius:8px; overflow:auto; text-align:center; width:100%; box-sizing:border-box;"></div>
       </div>
     </div>
   </section>
-</section>
 
 <main class="layout-content dashboard-layout" id="inventoryAnalyticsSection" style="display:none;">
   <div class="col-md-12">
