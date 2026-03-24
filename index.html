@@ -400,28 +400,20 @@ code{ background:#f7f7f9; border:1px solid #eee; border-radius:6px; padding:0 6p
 
         <!-- Results area -->
         <!-- Results area -->
-        <section id="results" class="container" style="margin-top: 20px;">
-          <div class="row">
-            <div class="col-md-6" style="left: -600px;top: 50px;">
-              <h4 class="headingitem">Forecast Plot</h4>
-              <br><br>
-              <div id="plotContainer" class="img-wrap" style="background: #fff; padding: 12px; border: 1px solid #eee; border-radius: 8px; min-height:400px; text-align:center;width: 1170px;"></div>
-            </div>
-            <div class="col-md-6" style="left:-585px;margin-top: 20px;" >
-              <br><br><br>
-              <h4 class="headingitem">Forecast Table</h4>
-              <br>
-              <div id="tableContainer" style="background: #fff; padding: 12px; border: 1px solid #eee; border-radius: 8px; overflow: auto;text-align:center;width: 1170px;"></div>
-            </div>
-            <div class="col-md-6" style="left:-585px;">
-            <br><br><br>
-            <h4 class="headingitem">Forecast Assumptions</h4>
-            <br>
-            <div id="assumptionsContainer" class="container" style="margin-top: 20px;"></div>
-            </div>
-          </div>
+        <section id="results" style="margin-top: 20px; width: 100%; padding: 0 16px; box-sizing: border-box;">
 
-          </div>
+          <!-- Plot -->
+          <h4 style="text-align:center; margin-bottom:12px;">Forecast Plot</h4>
+          <div id="plotContainer" class="img-wrap" style="background:#fff; padding:12px; border:1px solid #eee; border-radius:8px; min-height:400px; text-align:center; width:100%; box-sizing:border-box;"></div>
+
+          <!-- Table -->
+          <h4 style="text-align:center; margin:24px 0 12px;">Forecast Table</h4>
+          <div id="tableContainer" style="background:#fff; padding:12px; border:1px solid #eee; border-radius:8px; overflow:auto; width:100%; box-sizing:border-box;"></div>
+
+          <!-- Assumptions -->
+          <h4 style="text-align:center; margin:24px 0 12px;">Forecast Assumptions</h4>
+          <div id="assumptionsContainer" style="width:100%; box-sizing:border-box; margin-bottom:40px;"></div>
+
         </section>
       </section>
 
@@ -810,7 +802,6 @@ const inventoryAnalyticsSection = document.getElementById("inventoryAnalyticsSec
       await fetchSalesForecast(selectedMonths);
     });
   }
-
 
 if (inventoryForecastingLink) {
   inventoryForecastingLink.addEventListener("click", (e) => {
