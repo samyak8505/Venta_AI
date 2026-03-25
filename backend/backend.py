@@ -458,8 +458,7 @@ def forecast_inventory_demand2(order_items_df, batch_df, product_id, months_ahea
     summary = {
         "ProductId":                    product_id,
         "CurrentStock":                 int(current_stock),
-        "ForecastedCumulativeDemand":   round(future_fc['cumulative_demand'].iloc[-1], 0),
-        "StockoutDate":                 stockout_date.strftime("%Y-%m") if stockout_date else "No stockout in forecast window",
+        "ForecastedCumulativeDemand":   round(future_fc['cumulative_demand'].iloc[-1], 0)
     }
 
     return fig, summary

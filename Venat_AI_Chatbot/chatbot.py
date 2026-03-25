@@ -36,7 +36,7 @@ with st.sidebar:
 
     st.markdown("---")
     st.markdown("**Sample questions:**")
-    st.markdown("- Compare sales of August 2025 and September 2025")
+    st.markdown("- Compare sales of January 2026 and February 2026")
     st.markdown("- Carry out the order analysis of 2025")
     st.markdown("- Compare monthly sales growth for this year versus last year.")
     st.markdown("- Which regions showed the highest increase in sales compared to the previous quarter")
@@ -423,7 +423,7 @@ def handle_query(user_input, agent, db):
         df = pd.read_sql(sql_no_limit, db._engine)
         
         # Check if this is an analytical question
-        analytical_keywords = ['compare', 'analysis', 'trend', 'why', 'reason', 'increase', 'decrease', 'growth', 'change', 'impact','pattern','which','what','how','analyze']
+        analytical_keywords = ['compare','comparison','analysis', 'trend', 'why', 'reason', 'increase', 'decrease', 'growth', 'change', 'impact','pattern','which','what','how','analyze','give','predict','prediction']
         is_analytical = any(keyword in user_input.lower() for keyword in analytical_keywords)
         
         if is_analytical and len(df) > 0:
