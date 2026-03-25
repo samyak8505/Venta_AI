@@ -1024,22 +1024,24 @@ function renderAssumptions(kind) {
 
   if (kind === "sales") {
     items = [
-      "<strong>Forecasting Model Used:</strong> Prophet — Models time series data by fitting trend, seasonality, and holiday components using a logistic model.",
-      "<strong>Growth Type:</strong> Logistic — The growth starts rapidly but slows down as it reaches maximum limit(ensuring the forecast stays with the cap and floor values).",
-      "<strong>Cap Value:</strong> 1.2 × max(sales) → limits how high forecasts can go.",,
-      "<strong>Floor Value:</strong> 5% × average(sales) → limits how low forecasts can go.",
-      "<strong>Seasonality:</strong> Yearly pattern detection for recurring sales cycles.",
-      "<strong>Outlier Handling:</strong> Removes extreme data spikes using IQR (Interquartile Range)."
-    ];
+  "<strong>Forecasting Model Used:</strong> Prophet — Models time series data by fitting trend and seasonality components using a linear growth model.",
+  "<strong>Growth Type:</strong> Linear — The model fits a straight trend line that can change direction at key points (changepoints), keeping forecasts realistic without overfitting.",
+  "<strong>Cap Value:</strong> 90th percentile of sales × 1.5 → sets a realistic upper ceiling for the forecast.",
+  "<strong>Floor Value:</strong> 10th percentile of sales × 0.5 → ensures the forecast never collapses to near zero.",
+  "<strong>Seasonality:</strong> Yearly pattern fitted using 3 Fourier terms — captures broad seasonal cycles without overfitting to noise.",
+  "<strong>Outlier Handling:</strong> Extreme variance smoothing using rolling 3-month median — months with unusually high or low sales (outside 20%–300% of local median) are temporarily smoothed during model training to prevent the forecast from overfitting to one-off peaks. Original values are preserved in the data table.",
+  "<strong>Changepoint Sensitivity:</strong> Conservative (0.01) — Kept low which prevents the model from overreacting to short-term spikes or dips."
+];
   } else if (kind === "product") {
     items = [
-      "<strong>Forecasting Model Used:</strong> Prophet — Models time series data by fitting trend, seasonality, and holiday components using a model.",
-      "<strong>Growth Type:</strong> Logistic — The growth starts rapidly but slows down as it reaches maximum limit(ensuring the forecast stays with the cap and floor values).",
-      "<strong>Cap Value:</strong> 1.2 × max(sales) → sets realistic upper growth limit.",
-      "<strong>Floor Value:</strong> 0.5 × min(sales) → ensures a realistic demand baseline.",
-      "<strong>Seasonality:</strong> Detects repeating yearly demand cycles.",
-      "<strong>Minimum Data Requirement:</strong> Product must have at least 6 months of sales history."
-    ];
+  "<strong>Forecasting Model Used:</strong> Prophet — Same linear growth model applied per product using monthly revenue (LineTotal) as the target variable.",
+  "<strong>Growth Type:</strong> Linear — Trend adapts gradually, avoiding wild swings caused by individual spike months.",
+  "<strong>Cap Value:</strong> 90th percentile of product's monthly sales × 1.5 → upper bound scaled to the product's own sales history.",
+  "<strong>Floor Value:</strong> 10th percentile of product's monthly sales × 0.5 → lower bound prevents unrealistically low forecasts.",
+  "<strong>Seasonality:</strong> Yearly pattern with 3 Fourier terms — fewer terms reduce overfitting on short product histories.",
+  "<strong>Outlier Handling:</strong> Extreme variance smoothing using rolling 3-month median — unusually high or low revenue months are smoothed during model training to improve forecast stability. Original historical values remain unchanged in the data table.",
+  "<strong>Minimum Data Requirement:</strong> Product must have at least 6 months of completed sales history to generate a forecast."
+];
   }
 
   const html = `
