@@ -443,9 +443,7 @@ def forecast_inventory_demand2(order_items_df, batch_df, product_id, months_ahea
                label=f'Current Stock ({current_stock:,.0f} units)')
 
     # Stockout marker
-    if stockout_date:
-        ax.axvline(x=stockout_date, color='darkred', linestyle=':', linewidth=1.5,
-                   label=f'Stockout ~{stockout_date.strftime("%b %Y")}')
+    
 
     y_max = max(monthly_clean['y'].max(), future_fc['yhat_upper'].max(), current_stock)
     ax.set_ylim(0, y_max * 1.20)
