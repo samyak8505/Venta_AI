@@ -794,7 +794,7 @@ def inventory_analysis(order_items_df, inventory_df, lead_time=2, service_level=
     # ---- Monthly demand per product (month-end) ----
     monthly_demand = (
         order_items_df
-        .groupby([pd.Grouper(key="PaidDateUtc", freq="ME"), "ProductId"])["Quantity"]
+        .groupby([pd.Grouper(key="PaidDateUtc",freq="ME"), "ProductId"])["Quantity"]
         .sum()
         .reset_index()
         .rename(columns={"PaidDateUtc": "Month", "Quantity": "TotalQuantity"})
