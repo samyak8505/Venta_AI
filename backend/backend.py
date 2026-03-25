@@ -626,111 +626,158 @@ def calculate_clv(sales_df,bins=10):
 def forecast_product_sales(order_items_df, product_id, months_ahead=3):
     """
     Forecast sales (revenue) for a single product using Prophet.
-    Ensures predictions never touch zero and lines stay smooth.
-    Uses LineTotal as sales amount.
-    Automatically scales y-axis (K or M) based on sales magnitude.
-    Returns all months (historical + forecast) with Month and TotalSales.
+    Same robust outlier handling, cap/floor, and styling as sales_forecast_limited.
     """
-
-    # --- Aggregate monthly sales ---
     prod_sales = (
         order_items_df[order_items_df["ProductId"] == product_id]
+        .dropna(subset=["PaidDateUtc"])
         .set_index("PaidDateUtc")["LineTotal"]
-        .resample("M").sum()
+        .resample("ME").sum()
         .reset_index()
         .rename(columns={"PaidDateUtc": "ds", "LineTotal": "y"})
     )
 
-    if len(prod_sales) > 6:
-        today = pd.Timestamp.today()
-        last_complete_month = today.replace(day=1) - pd.Timedelta(days=1)
-        train_sales = prod_sales[prod_sales["ds"] <= last_complete_month].copy()
-        current_month = prod_sales[prod_sales["ds"] > last_complete_month].copy()
+    today             = pd.Timestamp.today().normalize()
+    last_complete     = today.replace(day=1) - pd.Timedelta(days=1)
+    current_month     = prod_sales[prod_sales["ds"] > last_complete].copy()
+    prod_sales        = prod_sales[prod_sales["ds"] <= last_complete].reset_index(drop=True)
+    prod_sales        = prod_sales[prod_sales["y"] > 0].reset_index(drop=True)
 
-        # --- Define floor and cap ---
-        min_floor = max(1, float(train_sales["y"].min() * 0.5))
-        cap_value = float(train_sales["y"].max() * 1.2)
-        if cap_value <= min_floor:
-            cap_value = min_floor + 1.0
-
-        train_sales["floor"] = min_floor
-        train_sales["cap"] = cap_value
-
-        # --- Prophet model ---
-        m = Prophet(
-            yearly_seasonality=True,
-            weekly_seasonality=False,
-            daily_seasonality=False,
-            seasonality_mode="multiplicative",
-            growth="logistic"
-        )
-        m.fit(train_sales)
-
-        # --- Future periods ---
-        future = m.make_future_dataframe(periods=months_ahead, freq="M")
-        future["floor"] = min_floor
-        future["cap"] = cap_value
-
-        # --- Predict ---
-        forecast = m.predict(future)
-        for col in ["yhat", "yhat_lower", "yhat_upper"]:
-            forecast[col] = forecast[col].clip(lower=min_floor)
-
-        # --- Combine all months (historical + forecast) ---
-        combined = pd.concat([
-            train_sales[["ds", "y"]].rename(columns={"y": "yhat"}),
-            forecast[["ds", "yhat"]]
-        ])
-        combined = combined.groupby("ds", as_index=False).mean().sort_values("ds")
-
-        # --- Determine scale automatically ---
-        max_val = combined["yhat"].max()
-        if max_val >= 1e6:
-            scale = 1e6
-            scale_label = "Millions"
-            fmt = lambda x, _: f"${x:.1f}M"
-        elif max_val >= 1e3:
-            scale = 1e3
-            scale_label = "Thousands"
-            fmt = lambda x, _: f"${x:,.0f}K"
-        else:
-            scale = 1
-            scale_label = ""
-            fmt = lambda x, _: f"${x:,.0f}"
-
-        # --- Plot ---
-        fig, ax = plt.subplots(figsize=(10, 6))
-        plot_df = combined.copy()
-        plot_df["yhat"] /= scale
-        ax.plot(plot_df["ds"], plot_df["yhat"], color="green", label="Forecast (Sales)")
-        ax.scatter(train_sales["ds"], train_sales["y"] / scale, color="black", s=20, label="History")
-        if not current_month.empty:
-            ax.scatter(current_month["ds"], current_month["y"] / scale,
-                       color="red", s=40, label="Current Month (partial)")
-
-        ax.set_title(f"Product {product_id} - Sales Forecast")
-        ax.set_xlabel("Month")
-        ylabel = f"Sales (Revenue{', ' + scale_label if scale_label else ''})"
-        ax.set_ylabel(ylabel)
-        ax.yaxis.set_major_formatter(mticker.FuncFormatter(fmt))
-        ax.legend()
-        plt.close(fig)
-
-        # --- Final output DataFrame ---
-        output_df = combined[["ds", "yhat"]].copy()
-        output_df["Month"] = output_df["ds"].dt.to_period("M").astype(str)
-        output_df["TotalSales"] = output_df["yhat"].round(2)
-        output_df = output_df[["Month", "TotalSales"]].reset_index(drop=True)
-
-        return output_df, fig
-
-    else:
-        print(f"Not enough history to forecast sales for Product {product_id}")
+    if len(prod_sales) < 6:
         return None, None
 
+    # ── OUTLIER IMPUTATION (rolling median) ──────────────────────────────────
+    monthly_clean = prod_sales.copy()
+    rolling_med   = monthly_clean['y'].rolling(window=3, center=True, min_periods=1).median()
+    low_mask      = monthly_clean['y'] < (rolling_med * 0.20)
+    high_mask     = monthly_clean['y'] > (rolling_med * 3.0)
+    outlier_mask  = low_mask | high_mask
+    outliers      = monthly_clean[outlier_mask].copy()
 
+    monthly_clean.loc[outlier_mask, 'y'] = np.nan
+    monthly_clean['y'] = (
+        monthly_clean['y']
+        .interpolate(method='linear')
+        .bfill().ffill()
+    )
+    monthly_clean['y'] = monthly_clean['y'].clip(lower=1.0)
 
-  
+    # ── ROBUST CAP / FLOOR ───────────────────────────────────────────────────
+    cap_value = monthly_clean['y'].quantile(0.90) * 1.5
+    min_floor = max(1.0, monthly_clean['y'].quantile(0.10) * 0.5)
+
+    # ── PROPHET FIT ──────────────────────────────────────────────────────────
+    m = Prophet(
+        growth='linear',
+        yearly_seasonality=False,
+        weekly_seasonality=False,
+        daily_seasonality=False,
+        seasonality_mode='additive',
+        changepoint_prior_scale=0.01,
+        seasonality_prior_scale=2.0,
+        interval_width=0.80,
+        n_changepoints=min(10, len(monthly_clean) // 2)
+    )
+    m.add_seasonality(name='yearly', period=365.25, fourier_order=3)
+    m.fit(monthly_clean[['ds', 'y']])
+
+    # ── FORECAST ─────────────────────────────────────────────────────────────
+    future        = m.make_future_dataframe(periods=months_ahead, freq='ME')
+    forecast      = m.predict(future)
+    hist_end      = monthly_clean['ds'].max()
+    forecast_mask = forecast['ds'] > hist_end
+
+    for col in ['yhat', 'yhat_lower', 'yhat_upper']:
+        forecast.loc[forecast_mask, col] = forecast.loc[forecast_mask, col].clip(lower=min_floor)
+    forecast.loc[forecast_mask, 'yhat']       = forecast.loc[forecast_mask, 'yhat'].clip(upper=cap_value)
+    forecast.loc[forecast_mask, 'yhat_upper'] = forecast.loc[forecast_mask, 'yhat_upper'].clip(upper=cap_value * 1.1)
+
+    # ── AUTO SCALE (K or M) ───────────────────────────────────────────────────
+    max_val = max(monthly_clean['y'].max(), forecast.loc[forecast_mask, 'yhat'].max())
+    if max_val >= 1e6:
+        scale       = 1e6
+        scale_label = "in Millions"
+        fmt         = mticker.FuncFormatter(lambda x, _: f"${x/1e6:.2f}M")
+    elif max_val >= 1e3:
+        scale       = 1e3
+        scale_label = "in Thousands"
+        fmt         = mticker.FuncFormatter(lambda x, _: f"${x/1e3:,.0f}K")
+    else:
+        scale       = 1
+        scale_label = ""
+        fmt         = mticker.FuncFormatter(lambda x, _: f"${x:,.0f}")
+
+    # ── PLOT ─────────────────────────────────────────────────────────────────
+    fig, ax = plt.subplots(figsize=(14, 7))
+
+    # Uncertainty band — forecast only
+    ax.fill_between(
+        forecast.loc[forecast_mask, 'ds'],
+        forecast.loc[forecast_mask, 'yhat_lower'],
+        forecast.loc[forecast_mask, 'yhat_upper'],
+        color='#1f77b4', alpha=0.12, label='Uncertainty Band'
+    )
+
+    # Historical line (clean)
+    ax.plot(
+        monthly_clean['ds'], monthly_clean['y'],
+        color='#1f77b4', linewidth=2, marker='o', markersize=5,
+        label='Historical', zorder=3
+    )
+
+    # Outlier markers
+    if not outliers.empty:
+        ax.scatter(
+            outliers['ds'], outliers['y'],
+            color='#aaaaaa', marker='x', s=70, linewidths=2,
+            label='Excluded Outlier (DB glitch)', zorder=4
+        )
+
+    # Current (partial) month
+    if not current_month.empty:
+        ax.scatter(
+            current_month['ds'], current_month['y'],
+            color='green', marker='D', s=60, zorder=5,
+            label='Current Month (partial)'
+        )
+
+    # Forecast line — connected from last historical point
+    last_ds  = monthly_clean['ds'].iloc[-1]
+    last_y   = monthly_clean['y'].iloc[-1]
+    conn_ds  = pd.concat([pd.Series([last_ds]), forecast.loc[forecast_mask, 'ds']], ignore_index=True)
+    conn_y   = pd.concat([pd.Series([last_y]),  forecast.loc[forecast_mask, 'yhat']], ignore_index=True)
+    ax.plot(conn_ds, conn_y, color='#ff7f0e', linestyle='--', linewidth=2.2,
+            label='Forecast', zorder=3)
+
+    # Floor line
+    ax.axhline(y=min_floor, color='red', linestyle=':', alpha=0.4, linewidth=1,
+               label=f'Min Floor ({min_floor:,.0f})')
+
+    y_max = max(monthly_clean['y'].max(), forecast.loc[forecast_mask, 'yhat_upper'].max())
+    ax.set_ylim(0, y_max * 1.20)
+    ax.set_title(f"Product {product_id} — Sales Forecast", fontsize=14, fontweight='bold', pad=20)
+    ax.set_xlabel("Month", fontsize=12, labelpad=12)
+    ax.set_ylabel(f"Sales Revenue ({scale_label})", fontsize=12, labelpad=12)
+    ax.yaxis.set_major_formatter(fmt)
+    ax.legend(loc='upper left', fontsize=10, frameon=True)
+    ax.grid(axis='y', linestyle='--', alpha=0.4)
+    plt.tight_layout()
+    plt.close(fig)
+
+    # ── TABLE OUTPUT ─────────────────────────────────────────────────────────
+    hist_df           = prod_sales[['ds', 'y']].rename(columns={'y': 'TotalSales'})
+    hist_df['Source'] = 'Historical'
+
+    future_df           = forecast.loc[forecast_mask, ['ds', 'yhat']].rename(columns={'yhat': 'TotalSales'})
+    future_df['Source'] = 'Forecast'
+
+    output_df               = pd.concat([hist_df, future_df], ignore_index=True)
+    output_df['Month']      = output_df['ds'].dt.strftime('%Y-%m')
+    output_df['TotalSales'] = output_df['TotalSales'].round(2)
+    output_df               = output_df[['Month', 'TotalSales', 'Source']]
+
+    return output_df, fig
+
     
 def inventory_analysis(order_items_df, inventory_df, lead_time=2, service_level=0.95):
     """
