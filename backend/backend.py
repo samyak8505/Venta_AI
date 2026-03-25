@@ -428,10 +428,7 @@ def forecast_inventory_demand2(order_items_df, batch_df, product_id, months_ahea
         color='#1f77b4', linewidth=2, marker='o', markersize=4,
         label='Historical Demand', zorder=3
     )
-    if not outliers.empty:
-        ax.scatter(outliers['ds'], outliers['y'],
-                   color='#aaaaaa', marker='x', s=60, linewidths=2,
-                   label='Excluded Outlier', zorder=4)
+
 
     # Forecast line — connected
     last_ds = monthly_clean['ds'].iloc[-1]
@@ -726,12 +723,7 @@ def forecast_product_sales(order_items_df, product_id, months_ahead=3):
     )
 
     # Outlier markers
-    if not outliers.empty:
-        ax.scatter(
-            outliers['ds'], outliers['y'],
-            color='#aaaaaa', marker='x', s=70, linewidths=2,
-            label='Excluded Outlier (DB glitch)', zorder=4
-        )
+    
 
     # Current (partial) month
     if not current_month.empty:
